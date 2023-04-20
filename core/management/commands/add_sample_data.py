@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from core.models import Product, Order, OrderItem
+from core.models import Product, Order, OrderItem, Review
 
 class Command(BaseCommand):
-    help = 'Adds sample data for Products, Users, and Orders.'
+    help = 'Adds sample data for Products, Users, Reviews, and Orders.'
 
     def handle(self, *args, **options):
         # Create sample products
@@ -16,6 +16,16 @@ class Command(BaseCommand):
         for product in products:
             product.save()
             self.stdout.write(self.style.SUCCESS(f'Successfully created product: {product.name}'))
+
+            # Create sample reviews for each product
+            reviews = [
+                Review(product=product, user=User.objects.first(), rating=4, text="Good product"),
+                Review(product=product, user=User.objects.first(), rating=2, text="Not so great"),
+            ]
+
+            for review in reviews:
+                review.save()
+                self.stdout.write(self.style.SUCCESS(f'Successfully created review for {product.name}: {review.text}'))
 
         # Create a sample user
         user = User(username="testuser", email="testuser@example.com")
