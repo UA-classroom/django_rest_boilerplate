@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Product, Order, OrderItem
-from .serializers import ProductModelSerializer, OrderModelSerializer, OrderItemModelSerializer
+from .models import Product, Order, OrderItem, Review
+from .serializers import ProductModelSerializer, OrderModelSerializer, OrderItemModelSerializer, ProductReviewSerializer
 from django.http import Http404
 
 
@@ -92,4 +92,10 @@ class OrderItemList(APIView):
     def get(self, request):
         order_items = OrderItem.objects.all()
         serializer = OrderItemModelSerializer(order_items, many=True)
+        return Response(serializer.data)
+    
+class ProductReviewList(APIView):
+    def get(self, request):
+        reviews = Review.objects.all()
+        serializer = ProductReviewSerializer(reviews, many=True)
         return Response(serializer.data)
